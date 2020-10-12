@@ -1,0 +1,803 @@
+     1	[core]
+     2	# The folder where your airflow pipelines live, most likely a
+     3	# subfolder in a code repository
+     4	# This path must be absolute
+     5	dags_folder = /home/it_admin/airflow/dags
+     6	
+     7	# The folder where airflow should store its log files
+     8	# This path must be absolute
+     9	base_log_folder = /home/it_admin/airflow/logs
+    10	
+    11	# Airflow can store logs remotely in AWS S3, Google Cloud Storage or Elastic Search.
+    12	# Users must supply an Airflow connection id that provides access to the storage
+    13	# location. If remote_logging is set to true, see UPDATING.md for additional
+    14	# configuration requirements.
+    15	remote_logging = False
+    16	remote_log_conn_id =
+    17	remote_base_log_folder =
+    18	encrypt_s3_logs = False
+    19	
+    20	# Logging level
+    21	logging_level = INFO
+    22	fab_logging_level = WARN
+    23	
+    24	# Logging class
+    25	# Specify the class that will specify the logging configuration
+    26	# This class has to be on the python classpath
+    27	# logging_config_class = my.path.default_local_settings.LOGGING_CONFIG
+    28	logging_config_class =
+    29	
+    30	# Log format
+    31	# Colour the logs when the controlling terminal is a TTY.
+    32	colored_console_log = True
+    33	colored_log_format = [%%(blue)s%%(asctime)s%%(reset)s] {%%(blue)s%%(filename)s:%%(reset)s%%(lineno)d} %%(log_color)s%%(levelname)s%%(reset)s - %%(log_color)s%%(message)s%%(reset)s
+    34	colored_formatter_class = airflow.utils.log.colored_log.CustomTTYColoredFormatter
+    35	
+    36	log_format = [%%(asctime)s] {%%(filename)s:%%(lineno)d} %%(levelname)s - %%(message)s
+    37	simple_log_format = %%(asctime)s %%(levelname)s - %%(message)s
+    38	
+    39	# Log filename format
+    40	log_filename_template = {{ ti.dag_id }}/{{ ti.task_id }}/{{ ts }}/{{ try_number }}.log
+    41	log_processor_filename_template = {{ filename }}.log
+    42	dag_processor_manager_log_location = /home/it_admin/airflow/logs/dag_processor_manager/dag_processor_manager.log
+    43	
+    44	# Hostname by providing a path to a callable, which will resolve the hostname
+    45	# The format is "package:function". For example,
+    46	# default value "socket:getfqdn" means that result from getfqdn() of "socket" package will be used as hostname
+    47	# No argument should be required in the function specified.
+    48	# If using IP address as hostname is preferred, use value "airflow.utils.net:get_host_ip_address"
+    49	hostname_callable = socket:getfqdn
+    50	
+    51	# Default timezone in case supplied date times are naive
+    52	# can be utc (default), system, or any IANA timezone string (e.g. Europe/Amsterdam)
+    53	default_timezone = utc
+    54	
+    55	# The executor class that airflow should use. Choices include
+    56	# SequentialExecutor, LocalExecutor, CeleryExecutor, DaskExecutor, KubernetesExecutor
+    57	executor = SequentialExecutor
+    58	
+    59	# The SqlAlchemy connection string to the metadata database.
+    60	# SqlAlchemy supports many different database engine, more information
+    61	# their website
+    62	sql_alchemy_conn = sqlite:////home/it_admin/airflow/airflow.db
+    63	
+    64	# The encoding for the databases
+    65	sql_engine_encoding = utf-8
+    66	
+    67	# If SqlAlchemy should pool database connections.
+    68	sql_alchemy_pool_enabled = True
+    69	
+    70	# The SqlAlchemy pool size is the maximum number of database connections
+    71	# in the pool. 0 indicates no limit.
+    72	sql_alchemy_pool_size = 5
+    73	
+    74	# The maximum overflow size of the pool.
+    75	# When the number of checked-out connections reaches the size set in pool_size,
+    76	# additional connections will be returned up to this limit.
+    77	# When those additional connections are returned to the pool, they are disconnected and discarded.
+    78	# It follows then that the total number of simultaneous connections the pool will allow is pool_size + max_overflow,
+    79	# and the total number of "sleeping" connections the pool will allow is pool_size.
+    80	# max_overflow can be set to -1 to indicate no overflow limit;
+    81	# no limit will be placed on the total number of concurrent connections. Defaults to 10.
+    82	sql_alchemy_max_overflow = 10
+    83	
+    84	# The SqlAlchemy pool recycle is the number of seconds a connection
+    85	# can be idle in the pool before it is invalidated. This config does
+    86	# not apply to sqlite. If the number of DB connections is ever exceeded,
+    87	# a lower config value will allow the system to recover faster.
+    88	sql_alchemy_pool_recycle = 1800
+    89	
+    90	# How many seconds to retry re-establishing a DB connection after
+    91	# disconnects. Setting this to 0 disables retries.
+    92	sql_alchemy_reconnect_timeout = 300
+    93	
+    94	# The schema to use for the metadata database
+    95	# SqlAlchemy supports databases with the concept of multiple schemas.
+    96	sql_alchemy_schema =
+    97	
+    98	# The amount of parallelism as a setting to the executor. This defines
+    99	# the max number of task instances that should run simultaneously
+   100	# on this airflow installation
+   101	parallelism = 32
+   102	
+   103	# The number of task instances allowed to run concurrently by the scheduler
+   104	dag_concurrency = 16
+   105	
+   106	# Are DAGs paused by default at creation
+   107	dags_are_paused_at_creation = True
+   108	
+   109	# The maximum number of active DAG runs per DAG
+   110	max_active_runs_per_dag = 16
+   111	
+   112	# Whether to load the examples that ship with Airflow. It's good to
+   113	# get started, but you probably want to set this to False in a production
+   114	# environment
+   115	load_examples = True
+   116	
+   117	# Where your Airflow plugins are stored
+   118	plugins_folder = /home/it_admin/airflow/plugins
+   119	
+   120	# Secret key to save connection passwords in the db
+   121	fernet_key = 
+   122	
+   123	# Whether to disable pickling dags
+   124	donot_pickle = False
+   125	
+   126	# How long before timing out a python file import while filling the DagBag
+   127	dagbag_import_timeout = 30
+   128	
+   129	# The class to use for running task instances in a subprocess
+   130	task_runner = StandardTaskRunner
+   131	
+   132	# If set, tasks without a `run_as_user` argument will be run with this user
+   133	# Can be used to de-elevate a sudo user running Airflow when executing tasks
+   134	default_impersonation =
+   135	
+   136	# What security module to use (for example kerberos):
+   137	security =
+   138	
+   139	# If set to False enables some unsecure features like Charts and Ad Hoc Queries.
+   140	# In 2.0 will default to True.
+   141	secure_mode = False
+   142	
+   143	# Turn unit test mode on (overwrites many configuration options with test
+   144	# values at runtime)
+   145	unit_test_mode = False
+   146	
+   147	# Name of handler to read task instance logs.
+   148	# Default to use task handler.
+   149	task_log_reader = task
+   150	
+   151	# Whether to enable pickling for xcom (note that this is insecure and allows for
+   152	# RCE exploits). This will be deprecated in Airflow 2.0 (be forced to False).
+   153	enable_xcom_pickling = True
+   154	
+   155	# When a task is killed forcefully, this is the amount of time in seconds that
+   156	# it has to cleanup after it is sent a SIGTERM, before it is SIGKILLED
+   157	killed_task_cleanup_time = 60
+   158	
+   159	# Whether to override params with dag_run.conf. If you pass some key-value pairs through `airflow backfill -c` or
+   160	# `airflow trigger_dag -c`, the key-value pairs will override the existing ones in params.
+   161	dag_run_conf_overrides_params = False
+   162	
+   163	# Worker initialisation check to validate Metadata Database connection
+   164	worker_precheck = False
+   165	
+   166	# When discovering DAGs, ignore any files that don't contain the strings `DAG` and `airflow`.
+   167	dag_discovery_safe_mode = True
+   168	
+   169	
+   170	[cli]
+   171	# In what way should the cli access the API. The LocalClient will use the
+   172	# database directly, while the json_client will use the api running on the
+   173	# webserver
+   174	api_client = airflow.api.client.local_client
+   175	
+   176	# If you set web_server_url_prefix, do NOT forget to append it here, ex:
+   177	# endpoint_url = http://localhost:8080/myroot
+   178	# So api will look like: http://localhost:8080/myroot/api/experimental/...
+   179	endpoint_url = http://localhost:8080
+   180	
+   181	[api]
+   182	# How to authenticate users of the API
+   183	auth_backend = airflow.api.auth.backend.default
+   184	
+   185	[lineage]
+   186	# what lineage backend to use
+   187	backend =
+   188	
+   189	[atlas]
+   190	sasl_enabled = False
+   191	host =
+   192	port = 21000
+   193	username =
+   194	password =
+   195	
+   196	[operators]
+   197	# The default owner assigned to each new operator, unless
+   198	# provided explicitly or passed via `default_args`
+   199	default_owner = airflow
+   200	default_cpus = 1
+   201	default_ram = 512
+   202	default_disk = 512
+   203	default_gpus = 0
+   204	
+   205	[hive]
+   206	# Default mapreduce queue for HiveOperator tasks
+   207	default_hive_mapred_queue =
+   208	
+   209	[webserver]
+   210	# The base url of your website as airflow cannot guess what domain or
+   211	# cname you are using. This is used in automated emails that
+   212	# airflow sends to point links to the right web server
+   213	base_url = http://localhost:8080
+   214	
+   215	# The ip specified when starting the web server
+   216	web_server_host = 0.0.0.0
+   217	
+   218	# The port on which to run the web server
+   219	web_server_port = 8080
+   220	
+   221	# Paths to the SSL certificate and key for the web server. When both are
+   222	# provided SSL will be enabled. This does not change the web server port.
+   223	web_server_ssl_cert =
+   224	web_server_ssl_key =
+   225	
+   226	# Number of seconds the webserver waits before killing gunicorn master that doesn't respond
+   227	web_server_master_timeout = 120
+   228	
+   229	# Number of seconds the gunicorn webserver waits before timing out on a worker
+   230	web_server_worker_timeout = 120
+   231	
+   232	# Number of workers to refresh at a time. When set to 0, worker refresh is
+   233	# disabled. When nonzero, airflow periodically refreshes webserver workers by
+   234	# bringing up new ones and killing old ones.
+   235	worker_refresh_batch_size = 1
+   236	
+   237	# Number of seconds to wait before refreshing a batch of workers.
+   238	worker_refresh_interval = 30
+   239	
+   240	# Secret key used to run your flask app
+   241	secret_key = temporary_key
+   242	
+   243	# Number of workers to run the Gunicorn web server
+   244	workers = 4
+   245	
+   246	# The worker class gunicorn should use. Choices include
+   247	# sync (default), eventlet, gevent
+   248	worker_class = sync
+   249	
+   250	# Log files for the gunicorn webserver. '-' means log to stderr.
+   251	access_logfile = -
+   252	error_logfile = -
+   253	
+   254	# Expose the configuration file in the web server
+   255	# This is only applicable for the flask-admin based web UI (non FAB-based).
+   256	# In the FAB-based web UI with RBAC feature,
+   257	# access to configuration is controlled by role permissions.
+   258	expose_config = False
+   259	
+   260	# Set to true to turn on authentication:
+   261	# https://airflow.apache.org/security.html#web-authentication
+   262	authenticate = False
+   263	
+   264	# Filter the list of dags by owner name (requires authentication to be enabled)
+   265	filter_by_owner = False
+   266	
+   267	# Filtering mode. Choices include user (default) and ldapgroup.
+   268	# Ldap group filtering requires using the ldap backend
+   269	#
+   270	# Note that the ldap server needs the "memberOf" overlay to be set up
+   271	# in order to user the ldapgroup mode.
+   272	owner_mode = user
+   273	
+   274	# Default DAG view.  Valid values are:
+   275	# tree, graph, duration, gantt, landing_times
+   276	dag_default_view = tree
+   277	
+   278	# Default DAG orientation. Valid values are:
+   279	# LR (Left->Right), TB (Top->Bottom), RL (Right->Left), BT (Bottom->Top)
+   280	dag_orientation = LR
+   281	
+   282	# Puts the webserver in demonstration mode; blurs the names of Operators for
+   283	# privacy.
+   284	demo_mode = False
+   285	
+   286	# The amount of time (in secs) webserver will wait for initial handshake
+   287	# while fetching logs from other worker machine
+   288	log_fetch_timeout_sec = 5
+   289	
+   290	# By default, the webserver shows paused DAGs. Flip this to hide paused
+   291	# DAGs by default
+   292	hide_paused_dags_by_default = False
+   293	
+   294	# Consistent page size across all listing views in the UI
+   295	page_size = 100
+   296	
+   297	# Use FAB-based webserver with RBAC feature
+   298	rbac = False
+   299	
+   300	# Define the color of navigation bar
+   301	navbar_color = #007A87
+   302	
+   303	# Default dagrun to show in UI
+   304	default_dag_run_display_number = 25
+   305	
+   306	# Enable werkzeug `ProxyFix` middleware
+   307	enable_proxy_fix = False
+   308	
+   309	# Set secure flag on session cookie
+   310	cookie_secure = False
+   311	
+   312	# Set samesite policy on session cookie
+   313	cookie_samesite =
+   314	
+   315	# Default setting for wrap toggle on DAG code and TI log views.
+   316	default_wrap = False
+   317	
+   318	[email]
+   319	email_backend = airflow.utils.email.send_email_smtp
+   320	
+   321	
+   322	[smtp]
+   323	# If you want airflow to send emails on retries, failure, and you want to use
+   324	# the airflow.utils.email.send_email_smtp function, you have to configure an
+   325	# smtp server here
+   326	smtp_host = localhost
+   327	smtp_starttls = True
+   328	smtp_ssl = False
+   329	# Uncomment and set the user/pass settings if you want to use SMTP AUTH
+   330	# smtp_user = airflow
+   331	# smtp_password = airflow
+   332	smtp_port = 25
+   333	smtp_mail_from = airflow@example.com
+   334	
+   335	
+   336	[celery]
+   337	# This section only applies if you are using the CeleryExecutor in
+   338	# [core] section above
+   339	
+   340	# The app name that will be used by celery
+   341	celery_app_name = airflow.executors.celery_executor
+   342	
+   343	# The concurrency that will be used when starting workers with the
+   344	# "airflow worker" command. This defines the number of task instances that
+   345	# a worker will take, so size up your workers based on the resources on
+   346	# your worker box and the nature of your tasks
+   347	worker_concurrency = 16
+   348	
+   349	# The maximum and minimum concurrency that will be used when starting workers with the
+   350	# "airflow worker" command (always keep minimum processes, but grow to maximum if necessary).
+   351	# Note the value should be "max_concurrency,min_concurrency"
+   352	# Pick these numbers based on resources on worker box and the nature of the task.
+   353	# If autoscale option is available, worker_concurrency will be ignored.
+   354	# http://docs.celeryproject.org/en/latest/reference/celery.bin.worker.html#cmdoption-celery-worker-autoscale
+   355	# worker_autoscale = 16,12
+   356	
+   357	# When you start an airflow worker, airflow starts a tiny web server
+   358	# subprocess to serve the workers local log files to the airflow main
+   359	# web server, who then builds pages and sends them to users. This defines
+   360	# the port on which the logs are served. It needs to be unused, and open
+   361	# visible from the main web server to connect into the workers.
+   362	worker_log_server_port = 8793
+   363	
+   364	# The Celery broker URL. Celery supports RabbitMQ, Redis and experimentally
+   365	# a sqlalchemy database. Refer to the Celery documentation for more
+   366	# information.
+   367	# http://docs.celeryproject.org/en/latest/userguide/configuration.html#broker-settings
+   368	broker_url = sqla+mysql://airflow:airflow@localhost:3306/airflow
+   369	
+   370	# The Celery result_backend. When a job finishes, it needs to update the
+   371	# metadata of the job. Therefore it will post a message on a message bus,
+   372	# or insert it into a database (depending of the backend)
+   373	# This status is used by the scheduler to update the state of the task
+   374	# The use of a database is highly recommended
+   375	# http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-result-backend-settings
+   376	result_backend = db+mysql://airflow:airflow@localhost:3306/airflow
+   377	
+   378	# Celery Flower is a sweet UI for Celery. Airflow has a shortcut to start
+   379	# it `airflow flower`. This defines the IP that Celery Flower runs on
+   380	flower_host = 0.0.0.0
+   381	
+   382	# The root URL for Flower
+   383	# Ex: flower_url_prefix = /flower
+   384	flower_url_prefix =
+   385	
+   386	# This defines the port that Celery Flower runs on
+   387	flower_port = 5555
+   388	
+   389	# Securing Flower with Basic Authentication
+   390	# Accepts user:password pairs separated by a comma
+   391	# Example: flower_basic_auth = user1:password1,user2:password2
+   392	flower_basic_auth =
+   393	
+   394	# Default queue that tasks get assigned to and that worker listen on.
+   395	default_queue = default
+   396	
+   397	# How many processes CeleryExecutor uses to sync task state.
+   398	# 0 means to use max(1, number of cores - 1) processes.
+   399	sync_parallelism = 0
+   400	
+   401	# Import path for celery configuration options
+   402	celery_config_options = airflow.config_templates.default_celery.DEFAULT_CELERY_CONFIG
+   403	
+   404	# In case of using SSL
+   405	ssl_active = False
+   406	ssl_key =
+   407	ssl_cert =
+   408	ssl_cacert =
+   409	
+   410	# Celery Pool implementation.
+   411	# Choices include: prefork (default), eventlet, gevent or solo.
+   412	# See:
+   413	#   https://docs.celeryproject.org/en/latest/userguide/workers.html#concurrency
+   414	#   https://docs.celeryproject.org/en/latest/userguide/concurrency/eventlet.html
+   415	pool = prefork
+   416	
+   417	[celery_broker_transport_options]
+   418	# This section is for specifying options which can be passed to the
+   419	# underlying celery broker transport.  See:
+   420	# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-broker_transport_options
+   421	
+   422	# The visibility timeout defines the number of seconds to wait for the worker
+   423	# to acknowledge the task before the message is redelivered to another worker.
+   424	# Make sure to increase the visibility timeout to match the time of the longest
+   425	# ETA you're planning to use.
+   426	#
+   427	# visibility_timeout is only supported for Redis and SQS celery brokers.
+   428	# See:
+   429	#   http://docs.celeryproject.org/en/master/userguide/configuration.html#std:setting-broker_transport_options
+   430	#
+   431	#visibility_timeout = 21600
+   432	
+   433	[dask]
+   434	# This section only applies if you are using the DaskExecutor in
+   435	# [core] section above
+   436	
+   437	# The IP address and port of the Dask cluster's scheduler.
+   438	cluster_address = 127.0.0.1:8786
+   439	# TLS/ SSL settings to access a secured Dask scheduler.
+   440	tls_ca =
+   441	tls_cert =
+   442	tls_key =
+   443	
+   444	
+   445	[scheduler]
+   446	# Task instances listen for external kill signal (when you clear tasks
+   447	# from the CLI or the UI), this defines the frequency at which they should
+   448	# listen (in seconds).
+   449	job_heartbeat_sec = 5
+   450	
+   451	# The scheduler constantly tries to trigger new tasks (look at the
+   452	# scheduler section in the docs for more information). This defines
+   453	# how often the scheduler should run (in seconds).
+   454	scheduler_heartbeat_sec = 5
+   455	
+   456	# after how much time should the scheduler terminate in seconds
+   457	# -1 indicates to run continuously (see also num_runs)
+   458	run_duration = -1
+   459	
+   460	# after how much time (seconds) a new DAGs should be picked up from the filesystem
+   461	min_file_process_interval = 0
+   462	
+   463	# How often (in seconds) to scan the DAGs directory for new files. Default to 5 minutes.
+   464	dag_dir_list_interval = 300
+   465	
+   466	# How often should stats be printed to the logs
+   467	print_stats_interval = 30
+   468	
+   469	# If the last scheduler heartbeat happened more than scheduler_health_check_threshold ago (in seconds),
+   470	# scheduler is considered unhealthy.
+   471	# This is used by the health check in the "/health" endpoint
+   472	scheduler_health_check_threshold = 30
+   473	
+   474	child_process_log_directory = /home/it_admin/airflow/logs/scheduler
+   475	
+   476	# Local task jobs periodically heartbeat to the DB. If the job has
+   477	# not heartbeat in this many seconds, the scheduler will mark the
+   478	# associated task instance as failed and will re-schedule the task.
+   479	scheduler_zombie_task_threshold = 300
+   480	
+   481	# Turn off scheduler catchup by setting this to False.
+   482	# Default behavior is unchanged and
+   483	# Command Line Backfills still work, but the scheduler
+   484	# will not do scheduler catchup if this is False,
+   485	# however it can be set on a per DAG basis in the
+   486	# DAG definition (catchup)
+   487	catchup_by_default = True
+   488	
+   489	# This changes the batch size of queries in the scheduling main loop.
+   490	# If this is too high, SQL query performance may be impacted by one
+   491	# or more of the following:
+   492	#  - reversion to full table scan
+   493	#  - complexity of query predicate
+   494	#  - excessive locking
+   495	#
+   496	# Additionally, you may hit the maximum allowable query length for your db.
+   497	#
+   498	# Set this to 0 for no limit (not advised)
+   499	max_tis_per_query = 512
+   500	
+   501	# Statsd (https://github.com/etsy/statsd) integration settings
+   502	statsd_on = False
+   503	statsd_host = localhost
+   504	statsd_port = 8125
+   505	statsd_prefix = airflow
+   506	
+   507	# The scheduler can run multiple threads in parallel to schedule dags.
+   508	# This defines how many threads will run.
+   509	max_threads = 2
+   510	
+   511	authenticate = False
+   512	
+   513	# Turn off scheduler use of cron intervals by setting this to False.
+   514	# DAGs submitted manually in the web UI or with trigger_dag will still run.
+   515	use_job_schedule = True
+   516	
+   517	[ldap]
+   518	# set this to ldaps://<your.ldap.server>:<port>
+   519	uri =
+   520	user_filter = objectClass=*
+   521	user_name_attr = uid
+   522	group_member_attr = memberOf
+   523	superuser_filter =
+   524	data_profiler_filter =
+   525	bind_user = cn=Manager,dc=example,dc=com
+   526	bind_password = insecure
+   527	basedn = dc=example,dc=com
+   528	cacert = /etc/ca/ldap_ca.crt
+   529	search_scope = LEVEL
+   530	
+   531	# This setting allows the use of LDAP servers that either return a 
+   532	# broken schema, or do not return a schema. 
+   533	ignore_malformed_schema = False
+   534	
+   535	[mesos]
+   536	# Mesos master address which MesosExecutor will connect to.
+   537	master = localhost:5050
+   538	
+   539	# The framework name which Airflow scheduler will register itself as on mesos
+   540	framework_name = Airflow
+   541	
+   542	# Number of cpu cores required for running one task instance using
+   543	# 'airflow run <dag_id> <task_id> <execution_date> --local -p <pickle_id>'
+   544	# command on a mesos slave
+   545	task_cpu = 1
+   546	
+   547	# Memory in MB required for running one task instance using
+   548	# 'airflow run <dag_id> <task_id> <execution_date> --local -p <pickle_id>'
+   549	# command on a mesos slave
+   550	task_memory = 256
+   551	
+   552	# Enable framework checkpointing for mesos
+   553	# See http://mesos.apache.org/documentation/latest/slave-recovery/
+   554	checkpoint = False
+   555	
+   556	# Failover timeout in milliseconds.
+   557	# When checkpointing is enabled and this option is set, Mesos waits
+   558	# until the configured timeout for
+   559	# the MesosExecutor framework to re-register after a failover. Mesos
+   560	# shuts down running tasks if the
+   561	# MesosExecutor framework fails to re-register within this timeframe.
+   562	# failover_timeout = 604800
+   563	
+   564	# Enable framework authentication for mesos
+   565	# See http://mesos.apache.org/documentation/latest/configuration/
+   566	authenticate = False
+   567	
+   568	# Mesos credentials, if authentication is enabled
+   569	# default_principal = admin
+   570	# default_secret = admin
+   571	
+   572	# Optional Docker Image to run on slave before running the command
+   573	# This image should be accessible from mesos slave i.e mesos slave
+   574	# should be able to pull this docker image before executing the command.
+   575	# docker_image_slave = puckel/docker-airflow
+   576	
+   577	[kerberos]
+   578	ccache = /tmp/airflow_krb5_ccache
+   579	# gets augmented with fqdn
+   580	principal = airflow
+   581	reinit_frequency = 3600
+   582	kinit_path = kinit
+   583	keytab = airflow.keytab
+   584	
+   585	
+   586	[github_enterprise]
+   587	api_rev = v3
+   588	
+   589	[admin]
+   590	# UI to hide sensitive variable fields when set to True
+   591	hide_sensitive_variable_fields = True
+   592	
+   593	[elasticsearch]
+   594	# Elasticsearch host
+   595	host =
+   596	# Format of the log_id, which is used to query for a given tasks logs
+   597	log_id_template = {dag_id}-{task_id}-{execution_date}-{try_number}
+   598	# Used to mark the end of a log stream for a task
+   599	end_of_log_mark = end_of_log
+   600	# Qualified URL for an elasticsearch frontend (like Kibana) with a template argument for log_id
+   601	# Code will construct log_id using the log_id template from the argument above.
+   602	# NOTE: The code will prefix the https:// automatically, don't include that here.
+   603	frontend =
+   604	# Write the task logs to the stdout of the worker, rather than the default files
+   605	write_stdout = False
+   606	# Instead of the default log formatter, write the log lines as JSON
+   607	json_format = False
+   608	# Log fields to also attach to the json output, if enabled
+   609	json_fields = asctime, filename, lineno, levelname, message
+   610	
+   611	[kubernetes]
+   612	# The repository, tag and imagePullPolicy of the Kubernetes Image for the Worker to Run
+   613	worker_container_repository =
+   614	worker_container_tag =
+   615	worker_container_image_pull_policy = IfNotPresent
+   616	
+   617	# If True (default), worker pods will be deleted upon termination
+   618	delete_worker_pods = True
+   619	
+   620	# Number of Kubernetes Worker Pod creation calls per scheduler loop
+   621	worker_pods_creation_batch_size = 1
+   622	
+   623	# The Kubernetes namespace where airflow workers should be created. Defaults to `default`
+   624	namespace = default
+   625	
+   626	# The name of the Kubernetes ConfigMap Containing the Airflow Configuration (this file)
+   627	airflow_configmap =
+   628	
+   629	# For docker image already contains DAGs, this is set to `True`, and the worker will search for dags in dags_folder,
+   630	# otherwise use git sync or dags volume claim to mount DAGs
+   631	dags_in_image = False
+   632	
+   633	# For either git sync or volume mounted DAGs, the worker will look in this subpath for DAGs
+   634	dags_volume_subpath =
+   635	
+   636	# For DAGs mounted via a volume claim (mutually exclusive with git-sync and host path)
+   637	dags_volume_claim =
+   638	
+   639	# For volume mounted logs, the worker will look in this subpath for logs
+   640	logs_volume_subpath =
+   641	
+   642	# A shared volume claim for the logs
+   643	logs_volume_claim =
+   644	
+   645	# For DAGs mounted via a hostPath volume (mutually exclusive with volume claim and git-sync)
+   646	# Useful in local environment, discouraged in production
+   647	dags_volume_host =
+   648	
+   649	# A hostPath volume for the logs
+   650	# Useful in local environment, discouraged in production
+   651	logs_volume_host =
+   652	
+   653	# A list of configMapsRefs to envFrom. If more than one configMap is
+   654	# specified, provide a comma separated list: configmap_a,configmap_b
+   655	env_from_configmap_ref =
+   656	
+   657	# A list of secretRefs to envFrom. If more than one secret is
+   658	# specified, provide a comma separated list: secret_a,secret_b
+   659	env_from_secret_ref =
+   660	
+   661	# Git credentials and repository for DAGs mounted via Git (mutually exclusive with volume claim)
+   662	git_repo =
+   663	git_branch =
+   664	git_subpath =
+   665	# Use git_user and git_password for user authentication or git_ssh_key_secret_name and git_ssh_key_secret_key
+   666	# for SSH authentication
+   667	git_user =
+   668	git_password =
+   669	git_sync_root = /git
+   670	git_sync_dest = repo
+   671	# Mount point of the volume if git-sync is being used.
+   672	# i.e. /home/it_admin/airflow/dags
+   673	git_dags_folder_mount_point =
+   674	
+   675	# To get Git-sync SSH authentication set up follow this format
+   676	#
+   677	# airflow-secrets.yaml:
+   678	# ---
+   679	# apiVersion: v1
+   680	# kind: Secret
+   681	# metadata:
+   682	#   name: airflow-secrets
+   683	# data:
+   684	#   # key needs to be gitSshKey
+   685	#   gitSshKey: <base64_encoded_data>
+   686	# ---
+   687	# airflow-configmap.yaml:
+   688	# apiVersion: v1
+   689	# kind: ConfigMap
+   690	# metadata:
+   691	#   name: airflow-configmap
+   692	# data:
+   693	#   known_hosts: |
+   694	#       github.com ssh-rsa <...>
+   695	#   airflow.cfg: |
+   696	#       ...
+   697	#
+   698	# git_ssh_key_secret_name = airflow-secrets
+   699	# git_ssh_known_hosts_configmap_name = airflow-configmap
+   700	git_ssh_key_secret_name =
+   701	git_ssh_known_hosts_configmap_name =
+   702	
+   703	# For cloning DAGs from git repositories into volumes: https://github.com/kubernetes/git-sync
+   704	git_sync_container_repository = k8s.gcr.io/git-sync
+   705	git_sync_container_tag = v3.1.1
+   706	git_sync_init_container_name = git-sync-clone
+   707	
+   708	# The name of the Kubernetes service account to be associated with airflow workers, if any.
+   709	# Service accounts are required for workers that require access to secrets or cluster resources.
+   710	# See the Kubernetes RBAC documentation for more:
+   711	#   https://kubernetes.io/docs/admin/authorization/rbac/
+   712	worker_service_account_name =
+   713	
+   714	# Any image pull secrets to be given to worker pods, If more than one secret is
+   715	# required, provide a comma separated list: secret_a,secret_b
+   716	image_pull_secrets =
+   717	
+   718	# GCP Service Account Keys to be provided to tasks run on Kubernetes Executors
+   719	# Should be supplied in the format: key-name-1:key-path-1,key-name-2:key-path-2
+   720	gcp_service_account_keys =
+   721	
+   722	# Use the service account kubernetes gives to pods to connect to kubernetes cluster.
+   723	# It's intended for clients that expect to be running inside a pod running on kubernetes.
+   724	# It will raise an exception if called from a process not running in a kubernetes environment.
+   725	in_cluster = True
+   726	
+   727	# When running with in_cluster=False change the default cluster_context or config_file
+   728	# options to Kubernetes client. Leave blank these to use default behaviour like `kubectl` has.
+   729	# cluster_context =
+   730	# config_file =
+   731	
+   732	
+   733	# Affinity configuration as a single line formatted JSON object.
+   734	# See the affinity model for top-level key names (e.g. `nodeAffinity`, etc.):
+   735	#   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#affinity-v1-core
+   736	affinity =
+   737	
+   738	# A list of toleration objects as a single line formatted JSON array
+   739	# See:
+   740	#   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#toleration-v1-core
+   741	tolerations =
+   742	
+   743	# **kwargs parameters to pass while calling a kubernetes client core_v1_api methods from Kubernetes Executor
+   744	# provided as a single line formatted JSON dictionary string.
+   745	# List of supported params in **kwargs are similar for all core_v1_apis, hence a single config variable for all apis
+   746	# See:
+   747	#   https://raw.githubusercontent.com/kubernetes-client/python/master/kubernetes/client/apis/core_v1_api.py
+   748	kube_client_request_args =
+   749	
+   750	# Worker pods security context options
+   751	# See:
+   752	#   https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+   753	
+   754	# Specifies the uid to run the first process of the worker pods containers as
+   755	run_as_user =
+   756	
+   757	# Specifies a gid to associate with all containers in the worker pods
+   758	# if using a git_ssh_key_secret_name use an fs_group
+   759	# that allows for the key to be read, e.g. 65533
+   760	fs_group =
+   761	
+   762	[kubernetes_node_selectors]
+   763	# The Key-value pairs to be given to worker pods.
+   764	# The worker pods will be scheduled to the nodes of the specified key-value pairs.
+   765	# Should be supplied in the format: key = value
+   766	
+   767	[kubernetes_annotations]
+   768	# The Key-value annotations pairs to be given to worker pods.
+   769	# Should be supplied in the format: key = value
+   770	
+   771	[kubernetes_environment_variables]
+   772	# The scheduler sets the following environment variables into your workers. You may define as
+   773	# many environment variables as needed and the kubernetes launcher will set them in the launched workers.
+   774	# Environment variables in this section are defined as follows
+   775	#     <environment_variable_key> = <environment_variable_value>
+   776	#
+   777	# For example if you wanted to set an environment variable with value `prod` and key
+   778	# `ENVIRONMENT` you would follow the following format:
+   779	#     ENVIRONMENT = prod
+   780	#
+   781	# Additionally you may override worker airflow settings with the AIRFLOW__<SECTION>__<KEY>
+   782	# formatting as supported by airflow normally.
+   783	
+   784	[kubernetes_secrets]
+   785	# The scheduler mounts the following secrets into your workers as they are launched by the
+   786	# scheduler. You may define as many secrets as needed and the kubernetes launcher will parse the
+   787	# defined secrets and mount them as secret environment variables in the launched workers.
+   788	# Secrets in this section are defined as follows
+   789	#     <environment_variable_mount> = <kubernetes_secret_object>=<kubernetes_secret_key>
+   790	#
+   791	# For example if you wanted to mount a kubernetes secret key named `postgres_password` from the
+   792	# kubernetes secret object `airflow-secret` as the environment variable `POSTGRES_PASSWORD` into
+   793	# your workers you would follow the following format:
+   794	#     POSTGRES_PASSWORD = airflow-secret=postgres_credentials
+   795	#
+   796	# Additionally you may override worker airflow settings with the AIRFLOW__<SECTION>__<KEY>
+   797	# formatting as supported by airflow normally.
+   798	
+   799	[kubernetes_labels]
+   800	# The Key-value pairs to be given to worker pods.
+   801	# The worker pods will be given these static labels, as well as some additional dynamic labels
+   802	# to identify the task.
+   803	# Should be supplied in the format: key = value

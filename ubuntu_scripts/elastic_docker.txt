@@ -1,0 +1,26 @@
+sudo mkdir elasticsearch
+cd elasticsearch
+sudo git clone https://github.com/justmeandopensource/elk.git
+cd elk/docker/
+
+#do the ls in present directory, there are two .yml, 
+#update the elasticsearch and kibana version in the docker-compose.yml 
+#please note, elastic:latest will not work here
+#update the URL also in the same
+
+#now run the docker-compose
+docker-compose up -d
+
+#docker-compose logs -f 
+
+#docker-compose ps
+#output of above command should be
+#elasticsearch   /usr/local/bin/docker-entr   Up      0.0.0.0:9200->9200/tcp, 9300/tcp 
+#kibana          /usr/local/bin/kibana-       Up      0.0.0.0:5601->5601/tcp 
+
+
+sudo sysctl -w vm.max_map_count=262144
+
+docker-compose restart elasticsearch
+
+#now you can access kibana on this url - http://localhost:5601/
