@@ -1,7 +1,14 @@
 #!/bin/bash
 
+sudo yum check-update
+
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+
 # On Fedora 22 and above install the docker package:
-sudo dnf install docker
+sudo yum install docker
 
 # To start the Docker service use:
 sudo systemctl start docker
