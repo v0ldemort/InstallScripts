@@ -8,7 +8,7 @@ sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/dock
 
 
 # On Fedora 22 and above install the docker package:
-sudo yum install docker
+sudo yum install -y docker-ce docker-ce-cli containerd.io
 
 # To start the Docker service use:
 sudo systemctl start docker
