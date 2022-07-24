@@ -37,6 +37,7 @@ if [ "$var1" = "yes" ]
    then
       sudo curl -SL https://github.com/docker/compose/releases/download/v2.7.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
       sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+      sudo chmod +x /usr/local/bin/docker-compose
       docker-compose --version
       echo "Docker-Compose has been installed successfully"
     else
