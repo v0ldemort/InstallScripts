@@ -22,8 +22,8 @@ sudo docker run hello-world
 # To make Docker start when you boot your system, use the command:
 sudo systemctl enable docker
 
-# To create the docker group and add your user:
-sudo groupadd docker && sudo gpasswd -a ${USER} docker && sudo systemctl restart docker
+# Add your local user to docker group:
+sudo gpasswd -a ${USER} docker && sudo systemctl restart docker
 
 echo "Docker has been installed"
 
