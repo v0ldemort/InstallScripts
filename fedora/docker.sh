@@ -7,11 +7,14 @@ sudo yum remove docker \
                   docker-logrotate \
                   docker-engine
 
-sudo yum install -y yum-utils
-sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+#sudo yum install -y yum-utils
+#sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo dnf -y install dnf-plugins-core
+sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
 
 # On Fedora 22 and above install the docker package:
-sudo yum install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+#sudo yum install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+sudo dnf install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
 # To start the Docker service use:
 sudo systemctl start docker
